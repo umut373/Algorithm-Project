@@ -30,6 +30,20 @@ def generate_good_suffix_table() :
             j = bpos[j]
 
     good_suffix[p_length] = p_length
+        
+
+def print_tables() :
+    print("-----Bad Symbol Table-----")
+    for element in bad_symbol :
+        print(element, end = ' -> ')
+        print(bad_symbol[element])
+    print("* ->", p_length, "\n")
+
+    print("-----Good Suffix Table-----")
+    print("k     shift")
+    for i in range(p_length+1) :
+        print(i, end = '\t')
+        print(good_suffix[i])
 
 
 
@@ -46,8 +60,4 @@ if __name__ == "__main__" :
     generate_bad_symbol_table()
     generate_good_suffix_table()
 
-    for element in bad_symbol.items() :
-        print(element)
-
-    for i in good_suffix :
-        print(i)
+    print_tables()
