@@ -30,7 +30,27 @@ def generate_good_suffix_table() :
             j = bpos[j]
 
     good_suffix[p_length] = p_length
-        
+
+
+def search() :
+    i = 0
+    while i < (t_length - p_length) :
+        count = 0
+        for j in range(p_length) :
+            t_ch = text[p_length+i-j-1]
+            p_ch = pattern[p_length-j-1]
+            if t_ch ==  p_ch :
+                count += 1
+            else :
+                i += max(good_suffix[count], (bad_symbol.get(t_ch, p_length) - count)) - 1
+                break
+
+        if count == p_length :
+            print("Pattern found at index", i)
+            i += good_suffix[p_length] - 1
+            
+        i += 1
+            
 
 def print_tables() :
     print("-----Bad Symbol Table-----")
@@ -61,3 +81,5 @@ if __name__ == "__main__" :
     generate_good_suffix_table()
 
     print_tables()
+
+    search()
