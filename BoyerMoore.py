@@ -1,3 +1,5 @@
+import datetime
+
 def generate_bad_symbol_table() :
     for i in range(p_length-1) :
         bad_symbol[pattern[i]] = p_length - i - 1
@@ -42,7 +44,9 @@ def search() :
             if t_ch ==  p_ch :
                 count += 1
             else :
-                i += max(good_suffix[count], (bad_symbol.get(t_ch, p_length) - count)) - 1
+                d1 = max((bad_symbol.get(t_ch, p_length) - count), 1)
+                d2 = good_suffix[count]
+                i += max(d1, d2) - 1
                 break
 
         if count == p_length :
@@ -82,4 +86,7 @@ if __name__ == "__main__" :
 
     print_tables()
 
+    start_time = datetime.datetime.now()
     search()
+    exec_time = datetime.datetime.now() - start_time
+    print("Execution time is", exec_time.microseconds)
