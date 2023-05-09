@@ -50,11 +50,14 @@ def search() :
                 break
 
         if count == p_length :
-            print(text[:i], "<MARK>", pattern, "</MARK>", text[i+p_length:], sep='')
+            output = text[:i] + "<MARK>" + pattern + "</MARK>" + text[i+p_length:]
+            output_file.write(output)
             i += good_suffix[p_length] - 1
             
         i += 1
-            
+
+    output_file.close()
+   
 
 def print_tables() :
     print("-----Bad Symbol Table-----")
@@ -72,8 +75,12 @@ def print_tables() :
 
 
 if __name__ == "__main__" :
-    text = "<HTML><BODY>WHICH_FINALLY_HALTS. _ _ AT_THAT POINT</BODY></HTML>"
-    pattern = "AT_THAT"
+    input_file = open("input.html", "r")
+    output_file = open("output.html", "w")
+
+    text = input_file.readline() 
+    input_file.close()
+    pattern = input("Enter a pattern: ")
 
     t_length = len(text)
     p_length = len(pattern)
