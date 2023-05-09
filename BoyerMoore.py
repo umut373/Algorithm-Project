@@ -50,7 +50,7 @@ def search() :
                 break
 
         if count == p_length :
-            print("Pattern found at index", i)
+            print(text[:i], "<MARK>", pattern, "</MARK>", text[i+p_length:], sep='')
             i += good_suffix[p_length] - 1
             
         i += 1
@@ -72,7 +72,7 @@ def print_tables() :
 
 
 if __name__ == "__main__" :
-    text = "WHICH_FINALLY_HALTS. _ _ AT_THAT POINT"
+    text = "<HTML><BODY>WHICH_FINALLY_HALTS. _ _ AT_THAT POINT</BODY></HTML>"
     pattern = "AT_THAT"
 
     t_length = len(text)
