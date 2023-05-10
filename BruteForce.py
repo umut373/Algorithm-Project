@@ -1,15 +1,19 @@
 import datetime
 
 def brute_force():
-    print(len(text) - len(pattern)-1)
-    for i in range(len(text) - len(pattern)-1):
+    at_least_one = False
+    for i in range(len(text) - len(pattern)+1):
         for j in range(len(pattern)):
             if pattern[j] == text[j+i]:
                 if j == len(pattern)-1:
                     output = text[:i] + "<MARK>" + pattern + "</MARK>" + text[i + len(pattern):]
                     output_file.write(output)
+                    at_least_one = True
             else:
                 break
+    if not at_least_one:
+        output = text
+        output_file.write(output)
 
 if __name__ == "__main__":
     input_file = open("input.html", "r")
