@@ -1,5 +1,5 @@
 import codecs
-
+import datetime
 
 file_name = "resource.html"
 
@@ -82,7 +82,12 @@ def mark_indexes(indexes, pattern, file_name):
 
 pattern = "worker"
 
-
+start = datetime.datetime.now()
 found_indexes = Horspool(pattern, file_name, counter)
+end = datetime.datetime.now()
+
 mark_indexes(found_indexes, pattern, file_name)
 print("Number of comparisons: " + str(counter[0]))
+
+#print in milliseconds
+print("Time taken: " + str((end - start).total_seconds() * 1000) + "ms")
