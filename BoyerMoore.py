@@ -36,6 +36,7 @@ def generate_good_suffix_table() :
 
 def search() :
     i = 0
+    global prev
     while i < (t_length - p_length) :
         count = 0
         for j in range(p_length) :
@@ -50,13 +51,18 @@ def search() :
                 break
 
         if count == p_length :
-            output = text[:i] + "<MARK>" + pattern + "</MARK>" + text[i+p_length:]
+            output = text[prev:i] + "<MARK>" + pattern + "</MARK>"
             output_file.write(output)
+            prev = i + p_length
             i += good_suffix[p_length] - 1
             
         i += 1
 
-    output_file.close()
+    output_file.write(text[prev:t_length-p_length+1])
+    if prev > t_length-p_length+1 :
+        prev = prev - (t_length-p_length+1)
+    else :
+        prev = 0
    
 
 def print_tables() :
@@ -78,11 +84,7 @@ if __name__ == "__main__" :
     input_file = open("input.html", "r")
     output_file = open("output.html", "w")
 
-    text = input_file.readline() 
-    input_file.close()
     pattern = input("Enter a pattern: ")
-
-    t_length = len(text)
     p_length = len(pattern)
 
     bad_symbol = {}
@@ -90,10 +92,33 @@ if __name__ == "__main__" :
 
     generate_bad_symbol_table()
     generate_good_suffix_table()
-
     print_tables()
 
+    text = ""
+    prev = 0
+
     start_time = datetime.datetime.now()
-    search()
+    while 1 :
+        read = input_file.read(250) 
+        if not read :
+            break
+        t_length = len(text)
+        text = text[t_length-p_length+1:] + read 
+        t_length = len(text)
+        
+        search()
+    output_file.write(text[t_length-p_length+1:])
     exec_time = datetime.datetime.now() - start_time
+
+    input_file.close()
+    output_file.close()
+
     print("Execution time is", exec_time.microseconds)
+
+
+
+
+
+
+    
+
