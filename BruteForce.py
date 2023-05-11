@@ -1,7 +1,5 @@
 import datetime
 
-import BoyerMoore
-
 def brute_force(input, output, patternn):
     index = 0; count = 0
     for i in range(len(input) - len(patternn)+1):
