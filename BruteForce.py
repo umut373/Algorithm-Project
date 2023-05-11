@@ -57,4 +57,4 @@ if __name__ == "__main__":
     start_time = datetime.datetime.now()
     brute_force_count = brute_force(text, output_file, pattern)
     exec_time = datetime.datetime.now() - start_time
-    print(brute_force_count, "matches found\nExecution time is", exec_time.microseconds, "\nNumber of comprasions is ", number_of_compression)
+    print(brute_force_count, "matches found\nExecution time is", exec_time.microseconds/1000000, "seconds \nNumber of comprasions is ", number_of_compression)
