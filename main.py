@@ -50,6 +50,7 @@ def brute_force():
         for j in range(p_length):
             number_of_comparisons[0] += 1
             if pattern[j] == text[j + i]:
+                number_of_comparisons[0] += 1
                 if j == p_length - 1:
                     number_of_occourences[0] += 1
             else:
