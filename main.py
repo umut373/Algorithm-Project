@@ -71,8 +71,6 @@ def horspool():
         if k == p_length:
             number_of_occourences[1] += 1
             #index is i - k + 1
-            index = i - k + 1
-            indexes.append(index)
         else :
             number_of_comparisons[1] += 1
         #if pattern is not equal to the text at i
@@ -94,6 +92,12 @@ def boyer_moore():
             k += 1      
 
         if k == p_length :
+            if read_count == 1 :
+                index = i
+            else :
+                index = ((read_count-1)*char_number) - p_length + 1 + i
+            indexes.append(index)
+
             number_of_occourences[2] += 1
             i += good_suffix_table[p_length] - 1
         else :
@@ -108,48 +112,48 @@ def search():
     start = datetime.datetime.now()
     brute_force()
     end = datetime.datetime.now()
-    execetuion_times[0] = (end - start).total_seconds() * 1000
+    execetuion_times[0] += (end - start).total_seconds() * 1000
 
     start = datetime.datetime.now()
     horspool()
     end = datetime.datetime.now()
-    execetuion_times[1] = (end - start).total_seconds() * 1000
+    execetuion_times[1] += (end - start).total_seconds() * 1000
 
     start = datetime.datetime.now()
     boyer_moore()
     end = datetime.datetime.now()
-    execetuion_times[2] = (end - start).total_seconds() * 1000
+    execetuion_times[2] += (end - start).total_seconds() * 1000
 
 def mark_occourences(): 
     i = 0
-    counter = 0
-    continued = False
-    output_list = list(text)
+    k = 0
+    end_indexes = [0]
     while i < len(indexes):
-        if not continued:
-            if i == 0:
-                output_list.insert(indexes[i] + counter, "<MARK>")
-                counter += 1
-            else:
-                output_list.insert(indexes[i] + counter, "<MARK>")
-                counter += 1
-                output_list.insert(indexes[i-1] + p_length + counter - 1, "</MARK>")
-                counter += 1
-            continued = True
-        else:
-            if indexes[i] > indexes[i-1]+p_length:
-                output_list.insert(indexes[i-1] + p_length + counter, "</MARK>")
-                continued = False
-                counter += 1
-                output_list.insert(indexes[i] + counter, "<MARK>")
-                counter += 1
-        i += 1
+        index1 = indexes[i]
+        output = ""
+        output = input_file.read(index1-end_indexes[k]) + "<MARK>"
+        j = i+1
+        end = 0
+        temp = index1
+        while j < len(indexes):
+            index2 = indexes[j]
+            if index2 >= temp + p_length:
+                break   
+            temp = index2
+            j += 1
+ 
+        index2 = indexes[j-1]
+        output += input_file.read(index2+p_length-index1) + "</MARK>"
 
-    if len(indexes) != 0:
-        output_list.insert(indexes[i-1] + p_length + counter, "</MARK>")
+        end += index2 + p_length
+        end_indexes.append(end)
+        k += 1
+        
+        output_file.write(output)
+        i = j
 
-    output_file.write("".join(output_list))
-
+    output_file.write(input_file.read())
+    
 def print_results():
     print("-----Results-----")
 
@@ -169,10 +173,7 @@ def print_results():
     print("Execution time:", execetuion_times[2], "ms\n")
 
 
-input_file = open("Crime And Punishment.html", "r", encoding="utf8")
-
-text = input_file.read()
-t_length = len(text)
+input_file = open("input.html", "r")
 
 pattern = input("Enter a pattern: ")
 p_length = len(pattern)
@@ -190,9 +191,24 @@ execetuion_times = [0.0, 0.0, 0.0]
 
 indexes = []
 
-search()
+char_number = 250
+read_count = 0
+text = ""
+while 1 :
+    read = input_file.read(char_number) 
+    if not read :
+        break
+    read_count += 1   
+    t_length = len(text)
+    text = text[t_length-p_length+1:] + read 
+    t_length = len(text)
+    search()
+
+input_file.close()
 print_results()
 
-output_file = open("deneme.html", "w")
+input_file = open("input.html", "r")
+output_file = open("output.html", "w")
 mark_occourences()
+input_file.close()
 output_file.close()
