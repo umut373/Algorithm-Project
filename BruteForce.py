@@ -1,18 +1,19 @@
 import datetime
 number_of_compression = 0
 
-def brute_force(input, output, patern):
+def brute_force(input, output, pattern):
     count = 0
     indexes = []
     a = 0
-    patern_length = len(patern)
+    patern_length = len(pattern)
     input_length = len(input)
 
     global number_of_compression
     for i in range(input_length - patern_length + 1):
         for j in range(patern_length):
             number_of_compression += 1
-            if patern[j] == input[j + i]:
+            if pattern[j] == input[j + i]:
+                number_of_compression += 1
                 if j == patern_length - 1:
                     indexes.append(i)
                     count += 1
