@@ -11,26 +11,35 @@ def generate_good_suffix_table():
     j = p_length + 1
     bpos = [0] * (p_length + 1)
     bpos[i] = j
-
-    while i > 0 :
-        while j <= p_length and pattern[i-1] != pattern[j-1] :
-            if good_suffix_table[p_length-j] == 0 :
-                good_suffix_table[p_length-j] = j - i
-
+    # while i is greater than 0
+    while i > 0:
+        # while j is less than or equal to the length of the pattern and
+        while j <= p_length and pattern[i - 1] != pattern[j - 1]:
+            # if the value of the good suffix table at j is 0
+            if good_suffix_table[p_length - j] == 0:
+                # set the value of the good suffix table at j to j - i
+                good_suffix_table[p_length - j] = j - i
+            # set j to the value of bpos at j
             j = bpos[j]
-        
+        # decrement i and j
         i -= 1
         j -= 1
+        # set the value of bpos at i to j
         bpos[i] = j
 
+    # set j to the value of bpos at 0
     j = bpos[0]
-    for i in range(p_length  + 1) :
-        if good_suffix_table[p_length-i] == 0 :
-            good_suffix_table[p_length-i] = j
+    # while j is less than or equal to the length of the pattern
+    for i in range(p_length + 1):
+        if good_suffix_table[p_length - i] == 0:
+            # set the value of the good suffix table at i to j
+            good_suffix_table[p_length - i] = j
 
-        if i == j :
+        if i == j:
+            # set j to the value of bpos at j
             j = bpos[j]
 
+#function for printing the tables
 def print_tables():
     print("\n-----Bad Symbol Table-----")
     for element in shift_table :
@@ -48,12 +57,13 @@ def print_tables():
 def brute_force():
     for i in range(t_length - p_length + 1):
         j = 0
+        #checking every character in the pattern
         while j < p_length:
             number_of_comparisons[0] += 1
             if pattern[j] != text[j + i]:
                 break
             j += 1
-        number_of_comparisons[0] += 1
+        #if the pattern is found
         if j == p_length:
             number_of_occourences[0] += 1
 
@@ -87,14 +97,17 @@ def horspool():
 
 def boyer_moore():
     i = 0
-    while i < (t_length - p_length) :
+    #iterate through the text
+    while i < (t_length - p_length):
         k = 0
-        while k < p_length and text[p_length+i-k-1] == pattern[p_length-k-1] :
+        #matched characters from the end of the pattern
+        while k < p_length and text[p_length + i - k - 1] == pattern[p_length - k - 1]:
             number_of_comparisons[2] += 1
             k += 1      
 
-        if k == p_length :
-            if read_count == 1 :
+        #pattern is found
+        if k == p_length:
+            if read_count == 1:
                 index = i
             else :
                 index = ((read_count-1)*char_number) - p_length + 1 + i
@@ -102,7 +115,8 @@ def boyer_moore():
 
             number_of_occourences[2] += 1
             i += good_suffix_table[p_length] - 1
-        else :
+        #shifting the pattern
+        else:
             number_of_comparisons[2] += 1
             d1 = max((shift_table.get(text[p_length+i-k-1], p_length) - k), 1)
             d2 = good_suffix_table[k]
@@ -110,6 +124,7 @@ def boyer_moore():
              
         i += 1
 
+#function for running the algorithms and calculating the execution times
 def search():
     start = datetime.datetime.now()
     brute_force()
@@ -126,26 +141,32 @@ def search():
     end = datetime.datetime.now()
     execetuion_times[2] += (end - start).total_seconds() * 1000
 
-def mark_occourences(): 
+
+#function for marking the occourences and making the output file
+def mark_occourences():
     i = 0
     k = 0
     end_indexes = [0]
+    #iterate through the indexes
     while i < len(indexes):
         index1 = indexes[i]
         output = ""
-        output = input_file.read(index1-end_indexes[k]) + "<MARK>"
-        j = i+1
+        #adding the opening tag of the mark
+        output = input_file.read(index1 - end_indexes[k]) + "<MARK>"
+        j = i + 1
         end = 0
         temp = index1
+        #iterate through the indexes and finding the last overlapping occourence
         while j < len(indexes):
             index2 = indexes[j]
             if index2 >= temp + p_length:
                 break   
             temp = index2
             j += 1
- 
-        index2 = indexes[j-1]
-        output += input_file.read(index2+p_length-index1) + "</MARK>"
+
+        index2 = indexes[j - 1]
+        #adding the closing tag of the mark
+        output += input_file.read(index2 + p_length - index1) + "</MARK>"
 
         end += index2 + p_length
         end_indexes.append(end)
@@ -154,6 +175,7 @@ def mark_occourences():
         output_file.write(output)
         i = j
 
+    #adding the rest of the text to the output file
     output_file.write(input_file.read())
     
 def print_results():
