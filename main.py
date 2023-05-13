@@ -47,14 +47,15 @@ def print_tables():
 
 def brute_force():
     for i in range(t_length - p_length + 1):
-        for j in range(p_length):
+        j = 0
+        while j < p_length:
             number_of_comparisons[0] += 1
-            if pattern[j] == text[j + i]:
-                number_of_comparisons[0] += 1
-                if j == p_length - 1:
-                    number_of_occourences[0] += 1
-            else:
+            if pattern[j] != text[j + i]:
                 break
+            j += 1
+        number_of_comparisons[0] += 1
+        if j == p_length:
+            number_of_occourences[0] += 1
 
 def horspool():
     i = p_length - 1
