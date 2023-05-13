@@ -1,3 +1,9 @@
+'''
+# Burak Karayagli - 150121824
+# Ege Keklikci - 150121029
+# Umut Ozil - 150121019
+'''
+
 import datetime
 
 def generate_shift_table():
@@ -79,10 +85,9 @@ def horspool():
             number_of_comparisons[1] += 1
             k += 1
         #after the while loop, if k is equal to the length of the pattern
-        #pattern is found at print the index
+        #incremnt the number of occourences by 1
         if k == p_length:
             number_of_occourences[1] += 1
-            #index is i - k + 1
         else :
             number_of_comparisons[1] += 1
         #if pattern is not equal to the text at i
@@ -92,8 +97,7 @@ def horspool():
         #else increment i by the length of the pattern
         else:
             i += p_length
-    
-    #return indexes
+
 
 def boyer_moore():
     i = 0
@@ -141,7 +145,6 @@ def search():
     end = datetime.datetime.now()
     execetuion_times[2] += (end - start).total_seconds() * 1000
 
-
 #function for marking the occourences and making the output file
 def mark_occourences():
     i = 0
@@ -178,6 +181,7 @@ def mark_occourences():
     #adding the rest of the text to the output file
     output_file.write(input_file.read())
     
+#function for printing the results
 def print_results():
     print("-----Results-----")
 
@@ -197,42 +201,55 @@ def print_results():
     print("Execution time:", execetuion_times[2], "ms\n")
 
 
-input_file = open("input.html", "r")
+if __name__ == '__main__' :
+    # names of the input and output files
+    input_path = "input.html"
+    output_path = "output.html"
 
-pattern = input("Enter a pattern: ")
-p_length = len(pattern)
+    input_file = open(input_path, "r") #opening the input file
 
-shift_table = {}
-good_suffix_table = [0] * (p_length + 1)
+    pattern = input("Enter a pattern: ") 
+    p_length = len(pattern)
 
-generate_shift_table()
-generate_good_suffix_table()
-print_tables()
+    shift_table = {}
+    good_suffix_table = [0] * (p_length + 1)
 
-number_of_comparisons = [0, 0, 0]
-number_of_occourences = [0, 0, 0]
-execetuion_times = [0.0, 0.0, 0.0]
+    generate_shift_table()
+    generate_good_suffix_table()
+    print_tables()
 
-indexes = []
+    #lists for storing the results
+    #index 0 for brute force
+    #index 1 for horspool
+    #index 2 for boyer moore
+    number_of_comparisons = [0, 0, 0]
+    number_of_occourences = [0, 0, 0]
+    execetuion_times = [0.0, 0.0, 0.0]
 
-char_number = 250
-read_count = 0
-text = ""
-while 1 :
-    read = input_file.read(char_number) 
-    if not read :
-        break
-    read_count += 1   
-    t_length = len(text)
-    text = text[t_length-p_length+1:] + read 
-    t_length = len(text)
-    search()
+    #list for store the indexes where the pattern is found
+    indexes = []
 
-input_file.close()
-print_results()
+    char_number = 500 #number of characters to be read at a time
+    read_count = 0 #number of times the input file is read
+    text = ""
+    #this loop is for reading the input file piece by piece 
+    while 1 :
+        read = input_file.read(char_number) 
+        #if the end of the file is reached break the loop
+        if not read :
+            break
+        read_count += 1   
+        t_length = len(text)
+        #add the last p_length-1 characters of the previous read to the current read
+        text = text[t_length-p_length+1:] + read
+        t_length = len(text)
+        search()
 
-input_file = open("input.html", "r")
-output_file = open("output.html", "w")
-mark_occourences()
-input_file.close()
-output_file.close()
+    input_file.close() 
+    print_results()
+
+    input_file = open(input_path , "r") #reopen the input file for marking the occourences
+    output_file = open(output_path , "w") #open the output file for writing
+    mark_occourences()
+    input_file.close()
+    output_file.close()
