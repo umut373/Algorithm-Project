@@ -145,19 +145,18 @@ def search():
     end = datetime.datetime.now()
     execetuion_times[2] += (end - start).total_seconds() * 1000
 
-#function for marking the occourences and making the output file
-def mark_occourences():
+#function for marking the occurrences and making the output file
+def mark_occurrences():
     i = 0
     k = 0
-    end_indexes = [0]
+    last_index = 0 #last index of the text that is added to the output file
     #iterate through the indexes
     while i < len(indexes):
         index1 = indexes[i]
         output = ""
         #adding the opening tag of the mark
-        output = input_file.read(index1 - end_indexes[k]) + "<MARK>"
+        output = input_file.read(index1 -  last_index) + "<MARK>"
         j = i + 1
-        end = 0
         temp = index1
         #iterate through the indexes and finding the last overlapping occourence
         while j < len(indexes):
@@ -170,12 +169,10 @@ def mark_occourences():
         index2 = indexes[j - 1]
         #adding the closing tag of the mark
         output += input_file.read(index2 + p_length - index1) + "</MARK>"
-
-        end += index2 + p_length
-        end_indexes.append(end)
-        k += 1
         
         output_file.write(output)
+        
+        last_index = input_file.tell()
         i = j
 
     #adding the rest of the text to the output file
