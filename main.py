@@ -15,34 +15,37 @@ def generate_shift_table():
 def generate_good_suffix_table():
     i = p_length 
     j = p_length + 1
-    bpos = [0] * (p_length + 1)
+    bpos = [0] * (p_length + 1) #bpos initialized with 0s
     bpos[i] = j
-    # while i is greater than 0
+
+    # case 1 and borders
     while i > 0:
-        # while j is less than or equal to the length of the pattern and
+        # if character at position i-1 is not equivalent to character at j-1, 
+        # continue searching to right of the pattern for border
         while j <= p_length and pattern[i - 1] != pattern[j - 1]:
-            # if the value of the good suffix table at j is 0
+            # if the preceding characters of borders are different,
+            # assign the shift value to corresponfing index to good_suffix_table
             if good_suffix_table[p_length - j] == 0:
-                # set the value of the good suffix table at j to j - i
-                good_suffix_table[p_length - j] = j - i
-            # set j to the value of bpos at j
-            j = bpos[j]
-        # decrement i and j
+                good_suffix_table[p_length - j] = j - i #distance between left and right border of suffix
+
+            j = bpos[j] # use the next widest border
+
+        # characers matched, new border is found
         i -= 1
         j -= 1
-        # set the value of bpos at i to j
         bpos[i] = j
 
-    # set j to the value of bpos at 0
+    # case 2
     j = bpos[0]
-    # while j is less than or equal to the length of the pattern
     for i in range(p_length + 1):
+        # set the elements of good_suffix_table to 
+        # border position of the pattern, if it has no value
         if good_suffix_table[p_length - i] == 0:
-            # set the value of the good suffix table at i to j
             good_suffix_table[p_length - i] = j
 
+        # if the suffix shorter than border position, 
+        # use the next widest border
         if i == j:
-            # set j to the value of bpos at j
             j = bpos[j]
 
 #function for printing the tables
@@ -104,7 +107,7 @@ def boyer_moore():
     #iterate through the text
     while i < (t_length - p_length):
         k = 0
-        #matched characters from the end of the pattern
+        #check if characters match starting from the right of the pattern
         while k < p_length and text[p_length + i - k - 1] == pattern[p_length - k - 1]:
             number_of_comparisons[2] += 1
             k += 1      
@@ -114,7 +117,7 @@ def boyer_moore():
             if read_count == 1:
                 index = i
             else :
-                index = ((read_count-1)*char_number) - p_length + 1 + i
+                index = ((read_count-1)*char_number) - p_length + 1 + i #calculate the index of the pattern in the text
             indexes.append(index)
 
             number_of_occourences[2] += 1
@@ -122,8 +125,8 @@ def boyer_moore():
         #shifting the pattern
         else:
             number_of_comparisons[2] += 1
-            d1 = max((shift_table.get(text[p_length+i-k-1], p_length) - k), 1)
-            d2 = good_suffix_table[k]
+            d1 = max((shift_table.get(text[p_length+i-k-1], p_length) - k), 1) # bad-symbol
+            d2 = good_suffix_table[k] # good-suffix
             i += max(d1, d2) - 1
              
         i += 1
