@@ -74,7 +74,7 @@ def brute_force():
             j += 1
         #if the pattern is found
         if j == p_length:
-            number_of_occourences[0] += 1
+            number_of_occurrences[0] += 1
 
 def horspool():
     i = p_length - 1
@@ -88,9 +88,9 @@ def horspool():
             number_of_comparisons[1] += 1
             k += 1
         #after the while loop, if k is equal to the length of the pattern
-        #incremnt the number of occourences by 1
+        #increment the number of occurrences by 1
         if k == p_length:
-            number_of_occourences[1] += 1
+            number_of_occurrences[1] += 1
         else :
             number_of_comparisons[1] += 1
         #if pattern is not equal to the text at i
@@ -120,7 +120,7 @@ def boyer_moore():
                 index = ((read_count-1)*char_number) - p_length + 1 + i #calculate the index of the pattern in the text
             indexes.append(index)
 
-            number_of_occourences[2] += 1
+            number_of_occurrences[2] += 1
             i += good_suffix_table[p_length] - 1
         #shifting the pattern
         else:
@@ -161,7 +161,7 @@ def mark_occurrences():
         output = input_file.read(index1 -  last_index) + "<MARK>"
         j = i + 1
         temp = index1
-        #iterate through the indexes and finding the last overlapping occourence
+        #iterate through the indexes and finding the last overlapping occurrence
         while j < len(indexes):
             index2 = indexes[j]
             if index2 >= temp + p_length:
@@ -186,18 +186,18 @@ def print_results():
     print("-----Results-----")
 
     print("Brute Force:")
+    print("Number of occurrences:", number_of_occurrences[0])
     print("Number of comparisons:", number_of_comparisons[0])
-    print("Number of occourences:", number_of_occourences[0])
     print("Execution time:", execetuion_times[0], "ms\n")
 
     print("Horspool:")
+    print("Number of occurrences:", number_of_occurrences[1])
     print("Number of comparisons:", number_of_comparisons[1])
-    print("Number of occourences:", number_of_occourences[1])
     print("Execution time:", execetuion_times[1], "ms\n")
 
     print("Boyer Moore:")
+    print("Number of occurrences:", number_of_occurrences[2])
     print("Number of comparisons:", number_of_comparisons[2])
-    print("Number of occourences:", number_of_occourences[2])
     print("Execution time:", execetuion_times[2], "ms\n")
 
 
@@ -223,7 +223,7 @@ if __name__ == '__main__' :
     #index 1 for horspool
     #index 2 for boyer moore
     number_of_comparisons = [0, 0, 0]
-    number_of_occourences = [0, 0, 0]
+    number_of_occurrences = [0, 0, 0]
     execetuion_times = [0.0, 0.0, 0.0]
 
     #list for store the indexes where the pattern is found
@@ -248,8 +248,8 @@ if __name__ == '__main__' :
     input_file.close() 
     print_results()
 
-    input_file = open(input_path , "r") #reopen the input file for marking the occourences
+    input_file = open(input_path , "r") #reopen the input file for marking the occurrences
     output_file = open(output_path , "w") #open the output file for writing
-    mark_occourences()
+    mark_occurrences()
     input_file.close()
     output_file.close()
