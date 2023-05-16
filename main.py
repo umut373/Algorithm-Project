@@ -105,7 +105,7 @@ def horspool():
 def boyer_moore():
     i = 0
     #iterate through the text
-    while i < (t_length - p_length):
+    while i <= (t_length - p_length):
         k = 0
         #check if characters match starting from the right of the pattern
         while k < p_length and text[p_length + i - k - 1] == pattern[p_length - k - 1]:
